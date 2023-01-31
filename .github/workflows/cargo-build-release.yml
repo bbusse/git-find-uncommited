@@ -56,8 +56,8 @@ jobs:
       - name: Compress binary
         run: |
           ls -al
-          ls -al targets/
-          ls -al targets/release/
+          ls -al target/
+          ls -al target/release/
           xz -k target/release/git-find-uncommited
           mv target/release/git-find-uncommited.xz target/release/git-find-uncommited-armv7.xz
 
