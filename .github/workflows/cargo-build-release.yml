@@ -51,13 +51,13 @@ jobs:
         with:
           use-cross: true
           command: build
-          args: --target armv7-unknown-linux-gnueabihf
+          args: --target armv7-unknown-linux-gnueabihf --release --all-features
 
       - name: Compress binary
         run: |
           ls -al
           ls -al target/armv7-unknown-linux-gnueabihf/
-          ls -al target/armv7-unknown-linux-gnueabihfrelease/
+          ls -al target/armv7-unknown-linux-gnueabihf/release/
           xz -k target/release/git-find-uncommited
           mv target/release/git-find-uncommited.xz target/release/git-find-uncommited-armv7.xz
 
