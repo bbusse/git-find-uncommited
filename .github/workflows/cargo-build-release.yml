@@ -55,11 +55,8 @@ jobs:
 
       - name: Compress binary
         run: |
-          ls -al
-          ls -al target/armv7-unknown-linux-gnueabihf/
-          ls -al target/armv7-unknown-linux-gnueabihf/release/
-          xz -k target/release/git-find-uncommited
-          mv target/release/git-find-uncommited.xz target/release/git-find-uncommited-armv7.xz
+          xz -k target/armv7-unknown-linux-gnueabihf/release/git-find-uncommited
+          mv target/armv7-unknown-linux-gnueabihf/release/git-find-uncommited.xz target/release/armv7-unknown-linux-gnueabihf/git-find-uncommited-armv7.xz
 
       - name: Release
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -68,4 +65,4 @@ jobs:
           prerelease: false
           automatic_release_tag: "latest"
           files: |
-            target/release/git-find-uncommited-armv7.xz
+            target/armv7-unknown-linux-gnueabihf/release/git-find-uncommited-armv7.xz
