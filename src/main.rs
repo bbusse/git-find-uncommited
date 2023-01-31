@@ -79,17 +79,25 @@ fn main() -> Result<(), Box<dyn Error>>  {
     let deps = vec!["git"];
     let mut repos_with_changes = Vec::new();
 
+    // Check dependencies
     for dep in deps {
         in_path_and_executable(dep);
     }
 
-    if ! args[0].is_empty() && path_exists(&args[0]) {
-        p = PathBuf::from(&args[0]);
+    // Check for user supplied path
+    if ! args[1].is_empty() {
+        if path_exists(&args[1]) {
+            p = PathBuf::from(&args[1]);
+        } else {
+            println!("{} is not a valid path. Aborting..", args[1]);
+            process::exit(0x0100);
+        }
     }
 
+    // Find repositories
     let repos = find_repositories(&p);
 
-    // Run `git status` on the repos found
+    // Run `git status` on the repositories found
     for repo in repos.iter() {
         repos_with_changes.append(&mut working_tree_status(repo.to_string()));
     }
