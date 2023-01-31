@@ -1,4 +1,4 @@
-# git-find-uncomited
+# git-find-uncommited
 Find git repositories with uncommited changes
 
 git-find-uncommited recurses the file tree at the current working directory
