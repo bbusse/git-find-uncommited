@@ -50,25 +50,21 @@ pub fn working_tree_status(p: String) -> Vec<String> {
     assert!(env::set_current_dir(path).is_ok());
 
     let output = Command::new("git")
-                             .args(["status"])
+                             .args(["status", "--short"])
         .stdout(Stdio::piped())
         .output()
         .unwrap();
 
     let stdout = String::from_utf8(output.stdout).unwrap();
-    let lines = stdout.lines();
 
-    if stdout.contains("working tree clean") {
+    if stdout.is_empty() {
         return paths;
     }
 
     paths.push(abs_path.to_owned());
 
     println!("\x1b[93m{}\x1b[0m\n", p);
-
-    for line in lines {
-        println!("{}", line)
-    }
+    println!("{}", stdout);
 
     return paths;
 }
@@ -85,7 +81,7 @@ fn main() -> Result<(), Box<dyn Error>>  {
     }
 
     // Check for user supplied path
-    if ! args[1].is_empty() {
+    if args.len() > 1 && ! args[1].is_empty() {
         if path_exists(&args[1]) {
             p = PathBuf::from(&args[1]);
         } else {
@@ -109,9 +105,9 @@ fn main() -> Result<(), Box<dyn Error>>  {
     if nrepos_with_changes == 0 {
         println!("\x1b[92mFound no (out of {}) repositories with uncommited changes\x1b[0m", nrepos);
     } else if nrepos_with_changes == 1 {
-        println!("\n\x1b[93mFound {} (out of {}) repository with uncommited changes\x1b[0m", nrepos_with_changes, nrepos);
+        println!("\x1b[93mFound {} (out of {}) repository with uncommited changes\x1b[0m", nrepos_with_changes, nrepos);
     } else if nrepos_with_changes > 1 {
-        println!("\n\x1b[93mFound {} (out of {}) repositories with uncommited changes\x1b[0m", nrepos_with_changes, nrepos);
+        println!("\x1b[93mFound {} (out of {}) repositories with uncommited changes\x1b[0m", nrepos_with_changes, nrepos);
     }
 
     Ok(())
