@@ -56,8 +56,8 @@ jobs:
       - name: Compress binary
         run: |
           ls -al
-          ls -al target/
-          ls -al target/release/
+          ls -al target/armv7-unknown-linux-gnueabihf/
+          ls -al target/armv7-unknown-linux-gnueabihfrelease/
           xz -k target/release/git-find-uncommited
           mv target/release/git-find-uncommited.xz target/release/git-find-uncommited-armv7.xz
 
@@ -69,4 +69,3 @@ jobs:
           automatic_release_tag: "latest"
           files: |
             target/release/git-find-uncommited-armv7.xz
-
