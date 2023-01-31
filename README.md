@@ -9,5 +9,16 @@ directory. If changes to the working directory are found, they are displayed.
 ```
 $ cd /usr/local/src && git-find-uncommited
 ```
+
+## Build
+```
+$ git clone https://github.com/bbusse/git-find-uncommited
+$ cd git-find-uncommited
+$ cargo build
+```
+## Install
+```
+$ cargo install --path .
+```
 ## Dependencies
 - git
