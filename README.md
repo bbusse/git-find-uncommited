@@ -10,6 +10,10 @@ If changes to the working directory are found, they are displayed.
 ```
 $ cd /usr/local/src && git-find-uncommited
 ```
+# or
+```
+$ git-find-uncommited /usr/local/src
+```
 
 ## Build
 ```
