@@ -45,7 +45,7 @@ pub fn working_tree_status(p: String) {
         return;
     }
 
-    println!("{:?}", p);
+    println!("{}", p);
 
     for line in lines {
         println!("{}", line)
