@@ -45,7 +45,7 @@ pub fn working_tree_status(p: String) {
         return;
     }
 
-    println!("{}", p);
+    println!("\x1b[93m{}\x1b[0m\n", p);
 
     for line in lines {
         println!("{}", line)
