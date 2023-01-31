@@ -5,9 +5,23 @@ use std::error::Error;
 use std::{env, fs};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
+use std::process;
 
 pub fn path_exists(path: &str) -> bool {
     fs::metadata(path).is_ok()
+}
+
+fn in_path_and_executable(cmd: &str) -> bool {
+    match Command::new(cmd).args(["-v"])
+                           .stdout(Stdio::null())
+                           .spawn() {
+        Ok(_) => true,
+        Err(_error) => {
+            println!("Failed to execute `git`. Is it installed?");
+            process::exit(0x0100);
+        },
+    };
+    false
 }
 
 pub fn find_repositories(p: &std::path::PathBuf) -> Vec<String> {
@@ -55,6 +69,11 @@ pub fn working_tree_status(p: String) {
 fn main() -> Result<(), Box<dyn Error>>  {
     let args: Vec<String> = env::args().collect();
     let mut p = env::current_dir().unwrap();
+    let deps = vec!["git"];
+
+    for dep in deps {
+        in_path_and_executable(dep);
+    }
 
     if ! args[0].is_empty() && path_exists(&args[0]) {
         p = PathBuf::from(&args[0]);
