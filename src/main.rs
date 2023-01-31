@@ -42,8 +42,11 @@ pub fn find_repositories(p: &std::path::PathBuf) -> Vec<String> {
     return paths
 }
 
-pub fn working_tree_status(p: String) {
+pub fn working_tree_status(p: String) -> Vec<String> {
+    let binding = fs::canonicalize(p.clone()).unwrap();
+    let abs_path = binding.to_str().unwrap();
     let path = Path::new(&p);
+    let mut paths = Vec::new();
     assert!(env::set_current_dir(path).is_ok());
 
     let output = Command::new("git")
@@ -56,20 +59,25 @@ pub fn working_tree_status(p: String) {
     let lines = stdout.lines();
 
     if stdout.contains("working tree clean") {
-        return;
+        return paths;
     }
+
+    paths.push(abs_path.to_owned());
 
     println!("\x1b[93m{}\x1b[0m\n", p);
 
     for line in lines {
         println!("{}", line)
     }
+
+    return paths;
 }
 
 fn main() -> Result<(), Box<dyn Error>>  {
     let args: Vec<String> = env::args().collect();
     let mut p = env::current_dir().unwrap();
     let deps = vec!["git"];
+    let mut repos_with_changes = Vec::new();
 
     for dep in deps {
         in_path_and_executable(dep);
@@ -80,8 +88,22 @@ fn main() -> Result<(), Box<dyn Error>>  {
     }
 
     let repos = find_repositories(&p);
+
+    // Run `git status` on the repos found
     for repo in repos.iter() {
-        working_tree_status(repo.to_string())
+        repos_with_changes.append(&mut working_tree_status(repo.to_string()));
+    }
+
+    let nrepos = repos.len();
+    let nrepos_with_changes = repos_with_changes.len();
+
+    // Show summary
+    if nrepos_with_changes == 0 {
+        println!("\x1b[92mFound no (out of {}) repositories with uncommited changes\x1b[0m", nrepos);
+    } else if nrepos_with_changes == 1 {
+        println!("\n\x1b[93mFound {} (out of {}) repository with uncommited changes\x1b[0m", nrepos_with_changes, nrepos);
+    } else if nrepos_with_changes > 1 {
+        println!("\n\x1b[93mFound {} (out of {}) repositories with uncommited changes\x1b[0m", nrepos_with_changes, nrepos);
     }
 
     Ok(())
