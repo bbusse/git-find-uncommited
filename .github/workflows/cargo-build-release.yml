@@ -34,4 +34,4 @@ jobs:
           prerelease: false
           automatic_release_tag: "latest"
           files: |
-            git-find-uncommited.xz
+            target/release/git-find-uncommited.xz
