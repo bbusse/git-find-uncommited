@@ -24,7 +24,7 @@ jobs:
           args: --release --all-features
 
       - name: Compress binary
-        run: xz git-find-uncommited-latest.xz target/release/git-find-uncommited
+        run: xz target/release/git-find-uncommited
 
       - name: Release
         uses: "marvinpinto/action-automatic-releases@latest"
