@@ -2,7 +2,7 @@ ARG ALPINE_VERSION=3.17.1
 FROM alpine:${ALPINE_VERSION}
 LABEL maintainer="Björn Busse <bj.rn@baerlin.eu>"
 
-ENV APK_ADD="git curl" \
+ENV APK_ADD="git curl xz" \
     USER="git"
 
 # Add packages
